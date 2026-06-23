@@ -224,13 +224,22 @@ select {
   margin-top: 20px;
 }
 
-.preset-row {
+.preset-row,
+.boost-row {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
   gap: 8px;
 }
 
-.preset-row button {
+.preset-row {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.boost-row {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.preset-row button,
+.boost-row button {
   min-height: 42px;
   border: 1px solid #323d52;
   border-radius: 999px;
@@ -239,7 +248,8 @@ select {
   font-weight: 800;
 }
 
-.preset-row button.active {
+.preset-row button.active,
+.boost-row button.active {
   border-color: var(--green);
   background: var(--green);
   color: #07110c;
@@ -250,6 +260,21 @@ select {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
   margin-top: 14px;
+}
+
+.boost-section {
+  margin-top: 20px;
+}
+
+.boost-input {
+  display: block;
+  margin-top: 14px;
+}
+
+.boost-preview {
+  margin: 10px 0 0;
+  color: var(--green);
+  font-weight: 800;
 }
 
 .result-panel {
@@ -367,6 +392,10 @@ code {
 
   .preset-row {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  .boost-row {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

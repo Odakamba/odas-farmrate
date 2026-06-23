@@ -7,6 +7,7 @@ Open `index.html` in a browser and use one of the three modes:
 - Earn: calculate how much currency you gain over a duration.
 - Target: calculate how long it takes to reach a target.
 - Convert: convert an income rate into per-second, per-minute, per-hour, and per-day values.
+- Boosts: apply preset or custom boosts such as `10%`, `1.5x`, or `2x`.
 
 The `assets` folder contains the visual used by the dark theme, so include it when deploying.
 

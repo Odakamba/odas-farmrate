@@ -48,6 +48,66 @@ const resultNote = $("resultNote");
 const breakdown = $("breakdown");
 const errorMessage = $("errorMessage");
 
+function parseBoost(value) {
+  const raw = String(value || "").trim().toLowerCase().replace(/\s/g, "");
+
+  if (!raw || raw === "none") {
+    return 1;
+  }
+
+  if (raw.endsWith("%")) {
+    const percent = Number(raw.slice(0, -1));
+
+    if (!Number.isFinite(percent)) {
+      throw new Error(`"${value}" is not a valid boost.`);
+    }
+
+    return 1 + percent / 100;
+  }
+
+  if (raw.endsWith("x")) {
+    const multiplier = Number(raw.slice(0, -1));
+
+    if (!Number.isFinite(multiplier)) {
+      throw new Error(`"${value}" is not a valid boost.`);
+    }
+
+    return multiplier;
+  }
+
+  const multiplier = Number(raw);
+
+  if (!Number.isFinite(multiplier)) {
+    throw new Error(`"${value}" is not a valid boost. Try 10%, 1.5x, or 2x.`);
+  }
+
+  return multiplier;
+}
+
+function getBoost(inputId) {
+  const boost = parseBoost($(inputId).value);
+
+  if (boost <= 0) {
+    throw new Error("Boost must be greater than 0.");
+  }
+
+  return boost;
+}
+
+function formatBoost(boost) {
+  return `${trimNumber(boost, 2)}x`;
+}
+
+function updateBoostPreview(inputId) {
+  const preview = $(`${inputId}Preview`);
+
+  try {
+    preview.textContent = `Final boost: ${formatBoost(getBoost(inputId))}`;
+  } catch {
+    preview.textContent = "Final boost: check input";
+  }
+}
+
 function parseGameNumber(value) {
   const raw = String(value || "").trim().replace(/,/g, "");
   const match = raw.match(/^([+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?)([a-z]*)$/i);
@@ -184,18 +244,22 @@ function renderEarn() {
   const currency = $("earnCurrency").value.trim() || "Currency";
   const income = parsePositive($("earnIncome").value, "Income");
   const interval = secondsFromInterval("earnIntervalAmount", "earnIntervalUnit");
+  const boost = getBoost("earnBoost");
   const seconds = durationSeconds();
-  const total = (income / interval) * seconds;
+  const baseRate = income / interval;
+  const boostedRate = baseRate * boost;
+  const total = boostedRate * seconds;
 
   resultLabel.textContent = "Total earned";
   mainResult.textContent = `${formatNumber(total)} ${currency}`;
-  resultNote.textContent = `At ${formatNumber(income)} ${currency} every ${plural(parseGameNumber($("earnIntervalAmount").value), $("earnIntervalUnit").value)} for ${formatDuration(seconds)}.`;
+  resultNote.textContent = `At ${formatNumber(income)} ${currency} every ${plural(parseGameNumber($("earnIntervalAmount").value), $("earnIntervalUnit").value)} with ${formatBoost(boost)} boost for ${formatDuration(seconds)}.`;
 
   renderBreakdown([
-    ["Per second", `${formatNumber((income / interval) * 1)} ${currency}`],
-    ["Per minute", `${formatNumber((income / interval) * 60)} ${currency}`],
-    ["Per hour", `${formatNumber((income / interval) * 3600)} ${currency}`],
-    ["Per day", `${formatNumber((income / interval) * 86400)} ${currency}`],
+    ["Boost", formatBoost(boost)],
+    ["Per second", `${formatNumber(boostedRate)} ${currency}`],
+    ["Per minute", `${formatNumber(boostedRate * 60)} ${currency}`],
+    ["Per hour", `${formatNumber(boostedRate * 3600)} ${currency}`],
+    ["Per day", `${formatNumber(boostedRate * 86400)} ${currency}`],
   ]);
 }
 
@@ -203,7 +267,8 @@ function renderTarget() {
   const currency = $("targetCurrency").value.trim() || "Currency";
   const current = parseGameNumber($("currentAmount").value);
   const target = parsePositive($("targetAmount").value, "Target");
-  const rate = getRatePerSecond("targetIncome", "targetIntervalAmount", "targetIntervalUnit");
+  const boost = getBoost("targetBoost");
+  const rate = getRatePerSecond("targetIncome", "targetIntervalAmount", "targetIntervalUnit") * boost;
   const remaining = Math.max(target - current, 0);
   const seconds = remaining / rate;
 
@@ -211,9 +276,10 @@ function renderTarget() {
   mainResult.textContent = remaining <= 0 ? "Ready now" : formatDuration(seconds);
   resultNote.textContent = remaining <= 0
     ? `You already have enough ${currency}.`
-    : `You need ${formatNumber(remaining)} more ${currency} to reach ${formatNumber(target)}.`;
+    : `You need ${formatNumber(remaining)} more ${currency} to reach ${formatNumber(target)} with ${formatBoost(boost)} boost.`;
 
   renderBreakdown([
+    ["Boost", formatBoost(boost)],
     ["Remaining", `${formatNumber(remaining)} ${currency}`],
     ["Rate per second", `${formatNumber(rate)} ${currency}`],
     ["Rate per minute", `${formatNumber(rate * 60)} ${currency}`],
@@ -223,13 +289,15 @@ function renderTarget() {
 
 function renderConvert() {
   const currency = $("convertCurrency").value.trim() || "Currency";
-  const rate = getRatePerSecond("convertIncome", "convertIntervalAmount", "convertIntervalUnit");
+  const boost = getBoost("convertBoost");
+  const rate = getRatePerSecond("convertIncome", "convertIntervalAmount", "convertIntervalUnit") * boost;
 
   resultLabel.textContent = "Converted rate";
   mainResult.textContent = `${formatNumber(rate * 3600)} ${currency}/hour`;
-  resultNote.textContent = `Based on ${$("convertIncome").value} ${currency} every ${plural(parseGameNumber($("convertIntervalAmount").value), $("convertIntervalUnit").value)}.`;
+  resultNote.textContent = `Based on ${$("convertIncome").value} ${currency} every ${plural(parseGameNumber($("convertIntervalAmount").value), $("convertIntervalUnit").value)} with ${formatBoost(boost)} boost.`;
 
   renderBreakdown([
+    ["Boost", formatBoost(boost)],
     ["Per second", `${formatNumber(rate)} ${currency}`],
     ["Per minute", `${formatNumber(rate * 60)} ${currency}`],
     ["Per hour", `${formatNumber(rate * 3600)} ${currency}`],
@@ -275,7 +343,25 @@ document.querySelectorAll("#durationDays, #durationHours, #durationMinutes, #dur
   });
 });
 
+document.querySelectorAll(".boost-row button").forEach((button) => {
+  button.addEventListener("click", () => {
+    const inputId = button.parentElement.dataset.boostGroup;
+    $(inputId).value = button.dataset.boost;
+    button.parentElement.querySelectorAll("button").forEach((item) => item.classList.toggle("active", item === button));
+    updateBoostPreview(inputId);
+    calculate();
+  });
+});
+
+["earnBoost", "targetBoost", "convertBoost"].forEach((inputId) => {
+  $(inputId).addEventListener("input", () => {
+    document.querySelectorAll(`[data-boost-group="${inputId}"] button`).forEach((button) => button.classList.toggle("active", button.dataset.boost === $(inputId).value.trim()));
+    updateBoostPreview(inputId);
+  });
+});
+
 form.addEventListener("input", calculate);
 form.addEventListener("change", calculate);
 
+["earnBoost", "targetBoost", "convertBoost"].forEach(updateBoostPreview);
 calculate();

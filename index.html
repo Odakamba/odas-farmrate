@@ -80,6 +80,23 @@
                   </label>
                 </div>
               </div>
+
+              <div class="boost-section">
+                <div class="section-title">Boost</div>
+                <div class="boost-row" data-boost-group="earnBoost">
+                  <button type="button" data-boost="1" class="active">None</button>
+                  <button type="button" data-boost="10%">10%</button>
+                  <button type="button" data-boost="25%">25%</button>
+                  <button type="button" data-boost="50%">50%</button>
+                  <button type="button" data-boost="2x">2x</button>
+                  <button type="button" data-boost="5x">5x</button>
+                </div>
+                <label class="boost-input">
+                  <span>Custom boost</span>
+                  <input id="earnBoost" type="text" value="1x" inputmode="decimal" autocomplete="off">
+                </label>
+                <p class="boost-preview" id="earnBoostPreview">Final boost: 1x</p>
+              </div>
             </div>
 
             <div class="mode-section" data-section="target">
@@ -114,6 +131,23 @@
                   </select>
                 </label>
               </div>
+
+              <div class="boost-section">
+                <div class="section-title">Boost</div>
+                <div class="boost-row" data-boost-group="targetBoost">
+                  <button type="button" data-boost="1" class="active">None</button>
+                  <button type="button" data-boost="10%">10%</button>
+                  <button type="button" data-boost="25%">25%</button>
+                  <button type="button" data-boost="50%">50%</button>
+                  <button type="button" data-boost="2x">2x</button>
+                  <button type="button" data-boost="5x">5x</button>
+                </div>
+                <label class="boost-input">
+                  <span>Custom boost</span>
+                  <input id="targetBoost" type="text" value="1x" inputmode="decimal" autocomplete="off">
+                </label>
+                <p class="boost-preview" id="targetBoostPreview">Final boost: 1x</p>
+              </div>
             </div>
 
             <div class="mode-section" data-section="convert">
@@ -139,6 +173,23 @@
                     <option value="day">Day</option>
                   </select>
                 </label>
+              </div>
+
+              <div class="boost-section">
+                <div class="section-title">Boost</div>
+                <div class="boost-row" data-boost-group="convertBoost">
+                  <button type="button" data-boost="1" class="active">None</button>
+                  <button type="button" data-boost="10%">10%</button>
+                  <button type="button" data-boost="25%">25%</button>
+                  <button type="button" data-boost="50%">50%</button>
+                  <button type="button" data-boost="2x">2x</button>
+                  <button type="button" data-boost="5x">5x</button>
+                </div>
+                <label class="boost-input">
+                  <span>Custom boost</span>
+                  <input id="convertBoost" type="text" value="1x" inputmode="decimal" autocomplete="off">
+                </label>
+                <p class="boost-preview" id="convertBoostPreview">Final boost: 1x</p>
               </div>
             </div>
           </form>

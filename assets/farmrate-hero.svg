@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" role="img" aria-labelledby="title desc">
+  <title id="title">Oda's FarmRate game currency visual</title>
+  <desc id="desc">Floating coins, gems, and upward rate lines on a dark background.</desc>
+  <defs>
+    <radialGradient id="bgGlow" cx="55%" cy="43%" r="60%">
+      <stop offset="0" stop-color="#1f8f6b" stop-opacity=".42"/>
+      <stop offset=".45" stop-color="#183456" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#090b0f" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="coin" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffe28a"/>
+      <stop offset=".45" stop-color="#f6b84a"/>
+      <stop offset="1" stop-color="#b86f16"/>
+    </linearGradient>
+    <linearGradient id="gemGreen" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#b9ffd4"/>
+      <stop offset=".45" stop-color="#50d890"/>
+      <stop offset="1" stop-color="#147a50"/>
+    </linearGradient>
+    <linearGradient id="gemBlue" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#d7ecff"/>
+      <stop offset=".5" stop-color="#64a8ff"/>
+      <stop offset="1" stop-color="#245db5"/>
+    </linearGradient>
+    <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="drop" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity=".42"/>
+    </filter>
+  </defs>
+
+  <rect width="900" height="520" fill="#090b0f"/>
+  <rect width="900" height="520" fill="url(#bgGlow)"/>
+
+  <g opacity=".42" stroke-linecap="round" fill="none">
+    <path d="M190 382 C336 310 408 340 572 204" stroke="#50d890" stroke-width="8"/>
+    <path d="M246 430 C404 326 500 332 684 122" stroke="#64a8ff" stroke-width="5"/>
+    <path d="M318 410 C456 306 536 276 752 162" stroke="#f4b84b" stroke-width="4"/>
+  </g>
+
+  <g opacity=".8" filter="url(#softGlow)">
+    <path d="M578 202 L646 202 L646 134" stroke="#50d890" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M646 134 L612 154 M646 134 L666 170" stroke="#50d890" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M692 126 L750 126 L750 68" stroke="#64a8ff" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M750 68 L724 82 M750 68 L766 96" stroke="#64a8ff" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <g filter="url(#drop)">
+    <g transform="translate(582 278) rotate(-10)">
+      <polygon points="0,-86 72,-38 54,56 0,98 -58,56 -76,-38" fill="url(#gemGreen)"/>
+      <polygon points="0,-86 72,-38 0,-10 -76,-38" fill="#d7ffe6" opacity=".55"/>
+      <polygon points="0,-10 54,56 0,98 -58,56" fill="#1e9c68" opacity=".55"/>
+      <path d="M0 -86 L0 98 M-76 -38 L72 -38 M-58 56 L54 56" stroke="#ffffff" stroke-opacity=".26" stroke-width="5"/>
+    </g>
+
+    <g transform="translate(730 292) rotate(16)">
+      <polygon points="0,-72 60,-28 44,44 0,82 -46,44 -62,-28" fill="url(#gemBlue)"/>
+      <polygon points="0,-72 60,-28 0,-6 -62,-28" fill="#f0f8ff" opacity=".5"/>
+      <path d="M0 -72 L0 82 M-62 -28 L60 -28 M-46 44 L44 44" stroke="#ffffff" stroke-opacity=".25" stroke-width="4"/>
+    </g>
+
+    <g transform="translate(482 172) rotate(14)">
+      <ellipse cx="0" cy="0" rx="66" ry="66" fill="url(#coin)"/>
+      <ellipse cx="0" cy="0" rx="46" ry="46" fill="none" stroke="#fff2b5" stroke-opacity=".55" stroke-width="8"/>
+      <path d="M-18 -24 H18 M0 -24 V30 M-22 6 H16" stroke="#7b4b12" stroke-opacity=".45" stroke-width="10" stroke-linecap="round"/>
+    </g>
+
+    <g transform="translate(690 412) rotate(-20) scale(.82)">
+      <ellipse cx="0" cy="0" rx="66" ry="66" fill="url(#coin)"/>
+      <ellipse cx="0" cy="0" rx="46" ry="46" fill="none" stroke="#fff2b5" stroke-opacity=".55" stroke-width="8"/>
+      <path d="M-18 -24 H18 M0 -24 V30 M-22 6 H16" stroke="#7b4b12" stroke-opacity=".45" stroke-width="10" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <g opacity=".48" filter="url(#softGlow)">
+    <circle cx="394" cy="266" r="7" fill="#50d890"/>
+    <circle cx="786" cy="208" r="6" fill="#64a8ff"/>
+    <circle cx="548" cy="410" r="5" fill="#f4b84b"/>
+    <circle cx="828" cy="354" r="4" fill="#50d890"/>
+  </g>
+</svg>
