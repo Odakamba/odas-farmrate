@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Oda's FarmRate</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">Game income calculator</p>
+          <h1>Oda's FarmRate</h1>
+          <p class="subtitle">Calculate gains, target time, and farming rates without fighting the math.</p>
+        </div>
+      </header>
+
+      <section class="mode-switch" aria-label="Calculator mode">
+        <button class="mode-button active" type="button" data-mode="earn">Earn</button>
+        <button class="mode-button" type="button" data-mode="target">Target</button>
+        <button class="mode-button" type="button" data-mode="convert">Convert</button>
+      </section>
+
+      <section class="workspace">
+        <section class="panel input-panel" aria-label="Calculator inputs">
+          <form id="farmForm">
+            <div class="mode-section active" data-section="earn">
+              <div class="field-grid">
+                <label>
+                  <span>Currency</span>
+                  <input id="earnCurrency" type="text" value="Gems" autocomplete="off">
+                </label>
+                <label>
+                  <span>Income amount</span>
+                  <input id="earnIncome" type="text" value="10k" inputmode="decimal" autocomplete="off">
+                </label>
+                <label>
+                  <span>Every</span>
+                  <input id="earnIntervalAmount" type="text" value="1" inputmode="decimal" autocomplete="off">
+                </label>
+                <label>
+                  <span>Interval</span>
+                  <select id="earnIntervalUnit">
+                    <option value="second">Second</option>
+                    <option value="minute" selected>Minute</option>
+                    <option value="hour">Hour</option>
+                    <option value="day">Day</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="time-picker">
+                <div class="section-title">Duration</div>
+                <div class="preset-row" id="durationPresets">
+                  <button type="button" data-seconds="60">1m</button>
+                  <button type="button" data-seconds="300">5m</button>
+                  <button type="button" data-seconds="1800">30m</button>
+                  <button type="button" data-seconds="3600" class="active">1h</button>
+                  <button type="button" data-seconds="28800">8h</button>
+                  <button type="button" data-seconds="86400">24h</button>
+                  <button type="button" data-seconds="604800">7d</button>
+                </div>
+                <div class="custom-time">
+                  <label>
+                    <span>Days</span>
+                    <input id="durationDays" type="number" min="0" value="0">
+                  </label>
+                  <label>
+                    <span>Hours</span>
+                    <input id="durationHours" type="number" min="0" value="1">
+                  </label>
+                  <label>
+                    <span>Minutes</span>
+                    <input id="durationMinutes" type="number" min="0" value="0">
+                  </label>
+                  <label>
+                    <span>Seconds</span>
+                    <input id="durationSeconds" type="number" min="0" value="0">
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="mode-section" data-section="target">
+              <div class="field-grid">
+                <label>
+                  <span>Currency</span>
+                  <input id="targetCurrency" type="text" value="Yen" autocomplete="off">
+                </label>
+                <label>
+                  <span>Current amount</span>
+                  <input id="currentAmount" type="text" value="15" inputmode="decimal" autocomplete="off">
+                </label>
+                <label>
+                  <span>Target amount</span>
+                  <input id="targetAmount" type="text" value="10k" inputmode="decimal" autocomplete="off">
+                </label>
+                <label>
+                  <span>Income amount</span>
+                  <input id="targetIncome" type="text" value="100" inputmode="decimal" autocomplete="off">
+                </label>
+                <label>
+                  <span>Every</span>
+                  <input id="targetIntervalAmount" type="text" value="1" inputmode="decimal" autocomplete="off">
+                </label>
+                <label>
+                  <span>Interval</span>
+                  <select id="targetIntervalUnit">
+                    <option value="second">Second</option>
+                    <option value="minute" selected>Minute</option>
+                    <option value="hour">Hour</option>
+                    <option value="day">Day</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div class="mode-section" data-section="convert">
+              <div class="field-grid">
+                <label>
+                  <span>Currency</span>
+                  <input id="convertCurrency" type="text" value="Coins" autocomplete="off">
+                </label>
+                <label>
+                  <span>Income amount</span>
+                  <input id="convertIncome" type="text" value="1B" inputmode="decimal" autocomplete="off">
+                </label>
+                <label>
+                  <span>Every</span>
+                  <input id="convertIntervalAmount" type="text" value="1" inputmode="decimal" autocomplete="off">
+                </label>
+                <label>
+                  <span>Interval</span>
+                  <select id="convertIntervalUnit">
+                    <option value="second" selected>Second</option>
+                    <option value="minute">Minute</option>
+                    <option value="hour">Hour</option>
+                    <option value="day">Day</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <aside class="panel result-panel" aria-live="polite">
+          <p class="result-label" id="resultLabel">Total earned</p>
+          <strong class="result-value" id="mainResult">600k Gems</strong>
+          <p class="result-note" id="resultNote">At 10k Gems every 1 minute for 1 hour.</p>
+
+          <div class="breakdown" id="breakdown"></div>
+          <p class="error-message" id="errorMessage"></p>
+        </aside>
+      </section>
+
+      <section class="reference-strip" aria-label="Supported formats">
+        <span>Supports</span>
+        <code>10k</code>
+        <code>1.5M</code>
+        <code>2B</code>
+        <code>1Qd</code>
+        <code>1Qn</code>
+        <code>1Sx</code>
+        <code>1e21</code>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
